@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
-
 import taxi.db.Storage;
 import taxi.lib.Dao;
 import taxi.model.Manufacturer;
@@ -35,7 +34,7 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
                 .filter(i -> Storage.manufacturers.get(i).getId() == manufacturer.getId())
                 .findFirst()
                 .ifPresent(i -> Storage.manufacturers.set(i, manufacturer));
-                return manufacturer;
+        return manufacturer;
     }
 
     @Override
