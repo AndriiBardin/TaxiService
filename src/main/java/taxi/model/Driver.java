@@ -33,4 +33,18 @@ public class Driver {
     public String getLicenceNumber() {
         return licenceNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Driver{"
+                + "id="
+                + id
+                + ", name='"
+                + name
+                + '\''
+                + ", licenceNumber='"
+                + licenceNumber
+                + '\''
+                + '}';
+    }
 }
