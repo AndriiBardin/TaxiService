@@ -24,7 +24,7 @@ public class Manufacturer {
         this.country = country;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -45,7 +45,7 @@ public class Manufacturer {
             return false;
         }
         Manufacturer that = (Manufacturer) o;
-        return id == that.id
+        return id.equals(that.id)
                 && Objects.equals(name, that.name)
                 && Objects.equals(country, that.country);
     }
