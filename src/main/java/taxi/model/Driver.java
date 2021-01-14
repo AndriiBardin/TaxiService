@@ -1,7 +1,7 @@
 package taxi.model;
 
 public class Driver {
-    private long id;
+    private Long id;
     private String name;
     private String licenceNumber;
 

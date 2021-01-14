@@ -1,9 +1,10 @@
 package taxi.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Car {
-    private long id;
+    private Long id;
     private String model;
     private Manufacturer manufacturer;
     private List<Driver> drivers;
@@ -11,7 +12,7 @@ public class Car {
     public Car(String model, Manufacturer manufacturer, List<Driver> drivers) {
         this.model = model;
         this.manufacturer = manufacturer;
-        this.drivers = drivers;
+        this.drivers = new ArrayList<>();
     }
 
     public void setId(Long id) {
