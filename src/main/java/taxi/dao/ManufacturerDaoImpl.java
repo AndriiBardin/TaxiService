@@ -31,7 +31,7 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
     @Override
     public Manufacturer update(Manufacturer manufacturer) {
         IntStream.of(0,Storage.manufacturers.size())
-                .filter(i -> Storage.manufacturers.get(i).getId() == manufacturer.getId())
+                .filter(i -> Storage.manufacturers.get(i).getId().equals(manufacturer.getId()))
                 .findFirst()
                 .ifPresent(i -> Storage.manufacturers.set(i, manufacturer));
         return manufacturer;
