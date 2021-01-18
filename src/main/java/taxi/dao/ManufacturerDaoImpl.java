@@ -1,7 +1,6 @@
 package taxi.dao;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import taxi.db.Storage;
@@ -19,7 +18,7 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
 
     public Optional<Manufacturer> get(Long id) {
         return getAll().stream()
-                .filter(manufacturer -> Objects.equals(manufacturer.getId(),id))
+                .filter(manufacturer -> manufacturer.getId().equals(id))
                 .findFirst();
     }
 
@@ -40,6 +39,6 @@ public class ManufacturerDaoImpl implements ManufacturerDao {
     @Override
     public boolean delete(Long id) {
         return Storage.manufacturers
-               .removeIf(i -> Objects.equals(i.getId(), id));
+               .removeIf(i -> i.getId().equals(id));
     }
 }

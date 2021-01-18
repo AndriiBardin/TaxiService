@@ -1,13 +1,11 @@
 package taxi.dao;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import taxi.db.Storage;
 import taxi.lib.Dao;
 import taxi.model.Driver;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Dao
 public class DriverDaoImpl implements DriverDao {
@@ -20,7 +18,7 @@ public class DriverDaoImpl implements DriverDao {
     @Override
     public Optional<Driver> get(Long id) {
         return getAll().stream()
-                .filter(driver -> Objects.equals(driver.getId(),id))
+                .filter(driver -> driver.getId().equals(id))
                 .findFirst();
     }
 
@@ -40,6 +38,6 @@ public class DriverDaoImpl implements DriverDao {
     @Override
     public boolean delete(Long id) {
         return Storage.drivers
-                .removeIf(i -> Objects.equals(i.getId(), id));
+                .removeIf(i -> i.getId().equals(id));
     }
 }

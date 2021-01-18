@@ -1,14 +1,12 @@
 package taxi.dao;
 
-import taxi.db.Storage;
-import taxi.lib.Dao;
-import taxi.model.Car;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import taxi.db.Storage;
+import taxi.lib.Dao;
+import taxi.model.Car;
 
 @Dao
 public class CarDaoImpl implements CarDao {
@@ -21,7 +19,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Optional<Car> get(Long id) {
         return getAll().stream()
-                .filter(car -> Objects.equals(car.getId(),id))
+                .filter(car -> car.getId().equals(id))
                 .findFirst();
     }
 
@@ -41,7 +39,7 @@ public class CarDaoImpl implements CarDao {
     @Override
     public boolean delete(Long id) {
         return Storage.cars
-                .removeIf(i -> Objects.equals(i.getId(), id));
+                .removeIf(i -> i.getId().equals(id));
     }
 
     @Override

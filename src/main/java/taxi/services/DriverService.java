@@ -1,8 +1,7 @@
 package taxi.services;
 
-import taxi.model.Driver;
-
 import java.util.List;
+import taxi.model.Driver;
 
 public interface DriverService {
     Driver create(Driver driver);

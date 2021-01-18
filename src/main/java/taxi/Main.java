@@ -14,30 +14,12 @@ public class Main {
     public static void main(String[] args) {
         ManufacturerService manufacturerService = (ManufacturerService)
                 injector.getInstance(ManufacturerService.class);
-        DriverService driverService = (DriverService)
-                injector.getInstance(DriverService.class);
-        CarService carService = (CarService)
-                injector.getInstance(CarService.class);
 
         Manufacturer toyota = new Manufacturer("Toyota", "Japan, Toyota City");
         Manufacturer honda = new Manufacturer("Honda", "Japan");
         Manufacturer koenigsegg = new Manufacturer("Koenigsegg", "Sweden, Angelholm");
         Manufacturer nissan = new Manufacturer("Nissan", "Japan");
         Manufacturer bmw = new Manufacturer("BMW", "Germany");
-
-        Driver one = new Driver("001", "0001");
-        Driver two = new Driver("002", "0002");
-        Driver three = new Driver("003", "0003");
-        Driver four = new Driver("004", "0005");
-        Driver five = new Driver("005", "0005");
-
-        Car yaris = new Car("Yaris GR", toyota);
-        Car markII = new Car("MarkII", toyota);
-        Car civic = new Car("Civic type r", honda);
-        Car nsx = new Car("NSX", honda);
-        Car gemera  = new Car("Gemera", koenigsegg);
-        Car skyline = new Car("Skyline R35", nissan);
-
 
         manufacturerService.create(toyota);
         manufacturerService.create(honda);
@@ -51,8 +33,18 @@ public class Main {
 
         Manufacturer manufacturerUpdate = manufacturerService.get(2L);
         manufacturerUpdate.setCountry("Japan, Minato-City");
+        System.out.println(manufacturerService.update(manufacturerUpdate));
 
         System.out.println(manufacturerService.getAll());
+
+        Driver one = new Driver("001", "0001");
+        Driver two = new Driver("002", "0002");
+        Driver three = new Driver("003", "0003");
+        Driver four = new Driver("004", "0005");
+        Driver five = new Driver("005", "0005");
+
+        DriverService driverService = (DriverService)
+                injector.getInstance(DriverService.class);
 
         driverService.create(one);
         driverService.create(two);
@@ -60,9 +52,19 @@ public class Main {
         driverService.create(four);
         driverService.create(five);
 
-        Driver driverUpdate = driverService.update(two);
+        Driver driverUpdate = driverService.get(2L);
         driverUpdate.setLicenceNumber("39800");
-        System.out.println(driverService.get(2L));
+        System.out.println(driverService.update(driverUpdate));
+
+        Car yaris = new Car("Yaris GR", toyota);
+        Car markII = new Car("MarkII", toyota);
+        Car civic = new Car("Civic type r", honda);
+        Car nsx = new Car("NSX", honda);
+        Car gemera = new Car("Gemera", koenigsegg);
+        Car skyline = new Car("Skyline R35", nissan);
+
+        CarService carService = (CarService)
+                injector.getInstance(CarService.class);
 
         carService.create(yaris);
         carService.create(markII);
