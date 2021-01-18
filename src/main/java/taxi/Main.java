@@ -8,10 +8,12 @@ import taxi.services.CarService;
 import taxi.services.DriverService;
 import taxi.services.ManufacturerService;
 
+import java.sql.SQLException;
+
 public class Main {
     private static Injector injector = Injector.getInstance("taxi");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         ManufacturerService manufacturerService = (ManufacturerService)
                 injector.getInstance(ManufacturerService.class);
 
