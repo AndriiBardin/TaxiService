@@ -5,13 +5,13 @@ import java.util.List;
 import taxi.model.Manufacturer;
 
 public interface ManufacturerService {
-    Manufacturer create(Manufacturer manufacturer) throws SQLException;
+    Manufacturer create(Manufacturer manufacturer);
 
-    Manufacturer get(Long id) throws SQLException;
+    Manufacturer get(Long id);
 
-    List<Manufacturer> getAll() throws SQLException;
+    List<Manufacturer> getAll();
 
-    Manufacturer update(Manufacturer manufacturer) throws SQLException;
+    Manufacturer update(Manufacturer manufacturer);
 
-    boolean delete(Long id) throws SQLException;
+    boolean delete(Long id);
 }

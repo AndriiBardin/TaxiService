@@ -1,18 +1,18 @@
 package taxi.dao;
 
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 import taxi.model.Manufacturer;
 
 public interface ManufacturerDao {
-    Manufacturer create(Manufacturer manufacturer) throws SQLException;
+    Manufacturer create(Manufacturer manufacturer);
 
-    Optional<Manufacturer> get(Long id) throws SQLException;
+    Optional<Manufacturer> get(Long id) ;
 
-    List<Manufacturer> getAll() throws SQLException;
+    List<Manufacturer> getAll();
 
-    Manufacturer update(Manufacturer manufacturer) throws SQLException;
+    Manufacturer update(Manufacturer manufacturer);
 
-    boolean delete(Long id) throws SQLException;
+    boolean delete(Long id);
 }

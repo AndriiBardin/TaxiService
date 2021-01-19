@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class Main {
     private static Injector injector = Injector.getInstance("taxi");
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         ManufacturerService manufacturerService = (ManufacturerService)
                 injector.getInstance(ManufacturerService.class);
 
@@ -34,7 +34,7 @@ public class Main {
         manufacturerService.delete(5L);
 
         Manufacturer manufacturerUpdate = manufacturerService.get(2L);
-        manufacturerUpdate.setCountry("Japan, Minato-City");
+        manufacturerUpdate.setCountry("Japan, Minato City");
         System.out.println(manufacturerService.update(manufacturerUpdate));
 
         System.out.println(manufacturerService.getAll());
