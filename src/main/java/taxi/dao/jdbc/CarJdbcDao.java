@@ -49,7 +49,7 @@ public class CarJdbcDao implements CarDao {
         } catch (SQLException e) {
             throw new RuntimeException("Cant get car by id " + id, e);
         }
-        if (car != null){
+        if (car != null) {
             car.setDrivers(getDriversFromCar(car.getId()));
         }
         return Optional.empty();
