@@ -1,6 +1,5 @@
 package taxi.services;
 
-import java.sql.SQLException;
 import java.util.List;
 import taxi.model.Manufacturer;
 
