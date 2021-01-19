@@ -27,8 +27,9 @@ public class ManufacturerJdbcDao implements ManufacturerDao {
             statement.setString(2, manufacturer.getCountry());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
-            manufacturer.setId(resultSet.getObject(1, Long.class));
+            if (resultSet.next()) {
+                manufacturer.setId(resultSet.getObject(1, Long.class));
+            }
             return manufacturer;
         } catch (SQLException e) {
             throw new RuntimeException("Can't create manufacturer" + manufacturer.getName(), e);
@@ -101,9 +102,9 @@ public class ManufacturerJdbcDao implements ManufacturerDao {
 
     private Manufacturer getManufacturer(ResultSet resultSet) {
         try {
-            Long manufacturerId = resultSet.getObject("id", Long.class);
-            String manufacturerName = resultSet.getObject("name", String.class);
-            String manufacturerCountry = resultSet.getObject("country", String.class);
+            Long manufacturerId = resultSet.getObject("manufacturer_id", Long.class);
+            String manufacturerName = resultSet.getObject("manufacturer_name", String.class);
+            String manufacturerCountry = resultSet.getObject("manufacturer_country", String.class);
             Manufacturer manufacturer = new Manufacturer(manufacturerName, manufacturerCountry);
             manufacturer.setId(manufacturerId);
             return manufacturer;
