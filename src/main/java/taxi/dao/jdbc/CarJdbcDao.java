@@ -38,15 +38,19 @@ public class CarJdbcDao implements CarDao {
     @Override
     public Optional<Car> get(Long id) {
         String getCarQuery = "SELECT * FROM cars WHERE id = ? AND deleted = false";
+        Car car = null;
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getCarQuery)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Optional.ofNullable(getCarFromResult(resultSet));
+                car = getCarFromResult(resultSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Cant get car by id " + id, e);
+        }
+        if (car != null){
+            car.setDrivers(getDriversFromCar(car.getId()));
         }
         return Optional.empty();
     }
@@ -61,10 +65,13 @@ public class CarJdbcDao implements CarDao {
             while (resultSet.next()) {
                 cars.add(getCarFromResult(resultSet));
             }
-            return cars;
         } catch (SQLException e) {
             throw new RuntimeException("Can't create list of cars", e);
         }
+        for (Car car : cars) {
+            car.setDrivers(getDriversFromCar(car.getId()));
+        }
+        return cars;
     }
 
     @Override
@@ -114,11 +121,15 @@ public class CarJdbcDao implements CarDao {
             while (resultSet.next()) {
                 carsByDriver.add(getCarFromResult(resultSet));
             }
-            return carsByDriver;
+
         } catch (SQLException e) {
             throw new RuntimeException("Cant create list of all cars for this driver "
                     + driverId, e);
         }
+        for (Car car : carsByDriver) {
+            car.setDrivers(getDriversFromCar(car.getId()));
+        }
+        return carsByDriver;
     }
 
     private Car getCarFromResult(ResultSet resultSet) {
@@ -160,6 +171,29 @@ public class CarJdbcDao implements CarDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Can't add drivers to car " + car.getId(), e);
+        }
+    }
+
+    private List<Driver> getDriversFromCar(Long carId) {
+        String query = "SELECT * FROM driver_cars dc "
+                + "INNER JOIN drivers d ON dc.driver_id = d.id "
+                + " WHERE car_id = ? AND deleted = false";
+        List<Driver> drivers = new ArrayList<>();
+        try (Connection connection = ConnectionUtil.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, carId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getObject("name", String.class);
+                String licence = resultSet.getObject("licence", String.class);
+                Long driverId = resultSet.getObject("id", Long.class);
+                Driver driver = new Driver(name, licence);
+                driver.setId(driverId);
+                drivers.add(driver);
+            }
+            return drivers;
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't get drivers from car " + carId, e);
         }
     }
 }

@@ -75,13 +75,11 @@ public class DriverJdbcDao implements DriverDao {
             preparedStatement.setString(1, driver.getName());
             preparedStatement.setString(2, driver.getLicenceNumber());
             preparedStatement.setLong(3, driver.getId());
-            if (preparedStatement.executeUpdate() > 0) {
-                return driver;
-            }
+            preparedStatement.executeUpdate();
+            return driver;
         } catch (SQLException e) {
             throw new RuntimeException("Can't update driver " + driver, e);
         }
-        throw new RuntimeException("Can't update driver " + driver.getId());
     }
 
     @Override
