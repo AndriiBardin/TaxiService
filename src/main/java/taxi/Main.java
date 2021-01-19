@@ -32,7 +32,7 @@ public class Main {
         manufacturerService.delete(5L);
 
         Manufacturer manufacturerUpdate = manufacturerService.get(2L);
-        manufacturerUpdate.setCountry("Japan, Minato-City");
+        manufacturerUpdate.setCountry("Japan, Minato City");
         System.out.println(manufacturerService.update(manufacturerUpdate));
 
         System.out.println(manufacturerService.getAll());
