@@ -37,7 +37,9 @@ public class CarJdbcDao implements CarDao {
 
     @Override
     public Optional<Car> get(Long id) {
-        String getCarQuery = "SELECT * FROM cars WHERE id = ? AND deleted = false";
+        String getCarQuery = "SELECT c.id, c.model, m.id, m.name, m.country "
+                + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id"
+                + "WHERE id = ? AND c.deleted = false AND m.deleted = false";
         Car car = null;
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getCarQuery)) {
@@ -52,7 +54,7 @@ public class CarJdbcDao implements CarDao {
         if (car != null) {
             car.setDrivers(getDriversFromCar(car.getId()));
         }
-        return Optional.empty();
+        return Optional.ofNullable(car);
     }
 
     @Override
@@ -90,9 +92,6 @@ public class CarJdbcDao implements CarDao {
         deleteDriversFromCars(car);
         addDriversToCar(car);
         return car;
-        // remove old relations between this car(car id) and drivers(from driver_cars table)
-        // delete from cars drivers where car id = carid (from update) -> insert for each
-        // insert new relations using car.getDrivers (71 line) for each driver adding new cars
     }
 
     @Override
@@ -109,9 +108,12 @@ public class CarJdbcDao implements CarDao {
 
     @Override
     public List<Car> getAllByDriverId(Long driverId) {
-        String getAllCarsByDriver = "Select * FROM driver_cars dc"
-                + " INNER JOIN cars c ON dc.driver_id = c.id"
-                + " WHERE dc.driver_id = ? AND c.deleted = false ";
+        String getAllCarsByDriver = "Select distinct c.id, c.model, m.id, m.name, m.country "
+                + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id "
+                + "INNER JOIN driver_cars dc ON c.id = dc.car_id "
+                + "INNER JOIN drivers d ON dc.driver_id = d.id "
+                + "WHERE dc.driver_id = ? AND c.deleted = false "
+                + "AND c.deleted = false AND d.deleted = false";
         List<Car> carsByDriver = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection
@@ -121,7 +123,6 @@ public class CarJdbcDao implements CarDao {
             while (resultSet.next()) {
                 carsByDriver.add(getCarFromResult(resultSet));
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Cant create list of all cars for this driver "
                     + driverId, e);
@@ -134,13 +135,13 @@ public class CarJdbcDao implements CarDao {
 
     private Car getCarFromResult(ResultSet resultSet) {
         try {
-            Long carId = resultSet.getObject("id", Long.class);
-            String model = resultSet.getObject("model", String.class);
-            Long manufacturerID = resultSet.getObject("manufacturer_id", Long.class);
-            String manufacturerName = resultSet.getObject("manufacturer_name", String.class);
-            String manufacturerCountry = resultSet.getObject("manufacturer_country", String.class);
+            Long carId = resultSet.getObject("c.id", Long.class);
+            String model = resultSet.getObject("c.model", String.class);
+            Long manufacturerId = resultSet.getObject("m.id", Long.class);
+            String manufacturerName = resultSet.getObject("m.name", String.class);
+            String manufacturerCountry = resultSet.getObject("m.country", String.class);
             Manufacturer manufacturer = new Manufacturer(manufacturerName, manufacturerCountry);
-            manufacturer.setId(manufacturerID);
+            manufacturer.setId(manufacturerId);
             Car car = new Car(model, manufacturer);
             car.setId(carId);
             return car;

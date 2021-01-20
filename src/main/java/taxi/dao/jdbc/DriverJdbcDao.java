@@ -17,7 +17,7 @@ import taxi.services.util.ConnectionUtil;
 public class DriverJdbcDao implements DriverDao {
     @Override
     public Driver create(Driver driver) {
-        String addDriverQuery = "INSERT INTO drivers" + " (name, licence)" + " VALUES (?, ?)";
+        String addDriverQuery = "INSERT INTO drivers (name, licence) VALUES (?, ?)";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(addDriverQuery,
                         Statement.RETURN_GENERATED_KEYS)) {
@@ -36,18 +36,18 @@ public class DriverJdbcDao implements DriverDao {
 
     @Override
     public Optional<Driver> get(Long id) {
-        String getByIdQuery = "SELECT * FROM drivers WHERE id = ? " + "AND deleted = false";
+        String getByIdQuery = "SELECT * FROM drivers WHERE id = ? AND deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getByIdQuery)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Optional.ofNullable(getDriver(resultSet));
+                return Optional.of(getDriver(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Can't get driver by id " + id, e);
         }
-        return Optional.empty();
+        throw new RuntimeException("Can't get driver by id " + id);
     }
 
     @Override
