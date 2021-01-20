@@ -4,16 +4,7 @@ import java.util.List;
 import taxi.model.Car;
 import taxi.model.Driver;
 
-public interface CarService {
-    Car create(Car car);
-
-    Car update(Car car);
-
-    Car get(Long id);
-
-    List<Car> getAll();
-
-    boolean delete(Long id);
+public interface CarService extends GenericService<Car, Long> {
 
     void addDriverToCar(Driver driver, Car car);
 
