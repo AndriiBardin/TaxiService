@@ -52,6 +52,8 @@ public class Main {
 
         Driver driverUpdate = driverService.get(2L);
         driverUpdate.setLicenceNumber("39800");
+        driverService.update(driverUpdate);
+        System.out.println(driverService.get(2L));
 
         Car yaris = new Car("Yaris GR", toyota);
         Car markII = new Car("MarkII", toyota);
@@ -78,6 +80,8 @@ public class Main {
         carService.addDriverToCar(three, markII);
         carService.addDriverToCar(four, skyline);
         carService.addDriverToCar(four, nsx);
+
+        System.out.println(carService.getAll());
 
         carService.delete(5L);
         carService.removeDriverFromCar(two,yaris);

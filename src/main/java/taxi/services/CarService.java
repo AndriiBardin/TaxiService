@@ -11,6 +11,8 @@ public interface CarService {
 
     Car get(Long id);
 
+    List<Car> getAll();
+
     boolean delete(Long id);
 
     void addDriverToCar(Driver driver, Car car);

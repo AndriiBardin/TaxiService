@@ -38,8 +38,8 @@ public class CarJdbcDao implements CarDao {
     @Override
     public Optional<Car> get(Long id) {
         String getCarQuery = "SELECT c.id, c.model, m.id, m.name, m.country "
-                + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id"
-                + "WHERE id = ? AND c.deleted = false AND m.deleted = false";
+                + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id "
+                + "WHERE c.id = ? AND c.deleted = false AND m.deleted = false";
         Car car = null;
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getCarQuery)) {
@@ -60,7 +60,9 @@ public class CarJdbcDao implements CarDao {
     @Override
     public List<Car> getAll() {
         List<Car> cars = new ArrayList<>();
-        String getAllCars = "SELECT * FROM cars WHERE deleted = false";
+        String getAllCars = "SELECT c.id, c.model, m.id, m.name, m.country "
+                + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id "
+                + "WHERE c.deleted = false AND m.deleted = false ";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getAllCars)) {
             ResultSet resultSet = preparedStatement.executeQuery();
