@@ -47,7 +47,7 @@ public class DriverJdbcDao implements DriverDao {
         } catch (SQLException e) {
             throw new RuntimeException("Can't get driver by id " + id, e);
         }
-        throw new RuntimeException("Can't get driver by id " + id);
+        return Optional.empty();
     }
 
     @Override

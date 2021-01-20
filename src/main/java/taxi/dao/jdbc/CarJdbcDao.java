@@ -114,7 +114,7 @@ public class CarJdbcDao implements CarDao {
                 + "FROM cars c INNER JOIN manufacturers m ON c.manufacturer_id = m.id "
                 + "INNER JOIN driver_cars dc ON c.id = dc.car_id "
                 + "INNER JOIN drivers d ON dc.driver_id = d.id "
-                + "WHERE dc.driver_id = ? AND c.deleted = false "
+                + "WHERE dc.driver_id = ? "
                 + "AND c.deleted = false AND d.deleted = false";
         List<Car> carsByDriver = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection();
