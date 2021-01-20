@@ -7,11 +7,14 @@ import taxi.model.Manufacturer;
 import taxi.services.CarService;
 import taxi.services.DriverService;
 import taxi.services.ManufacturerService;
+import taxi.services.util.ConnectionUtil;
 
 public class Main {
     private static Injector injector = Injector.getInstance("taxi");
 
     public static void main(String[] args) {
+        ConnectionUtil.clearTable();
+
         ManufacturerService manufacturerService = (ManufacturerService)
                 injector.getInstance(ManufacturerService.class);
 
@@ -27,15 +30,10 @@ public class Main {
         manufacturerService.create(nissan);
         manufacturerService.create(bmw);
 
-        System.out.println(manufacturerService.getAll());
-
         manufacturerService.delete(5L);
 
         Manufacturer manufacturerUpdate = manufacturerService.get(2L);
         manufacturerUpdate.setCountry("Japan, Minato City");
-        System.out.println(manufacturerService.update(manufacturerUpdate));
-
-        System.out.println(manufacturerService.getAll());
 
         Driver one = new Driver("001", "0001");
         Driver two = new Driver("002", "0002");
@@ -54,7 +52,8 @@ public class Main {
 
         Driver driverUpdate = driverService.get(2L);
         driverUpdate.setLicenceNumber("39800");
-        System.out.println(driverService.update(driverUpdate));
+        driverService.update(driverUpdate);
+        System.out.println(driverService.get(2L));
 
         Car yaris = new Car("Yaris GR", toyota);
         Car markII = new Car("MarkII", toyota);
@@ -82,13 +81,9 @@ public class Main {
         carService.addDriverToCar(four, skyline);
         carService.addDriverToCar(four, nsx);
 
+        System.out.println(carService.getAll());
+
         carService.delete(5L);
-
-        System.out.println(carService.getAllByDriver(2L));
-
         carService.removeDriverFromCar(two,yaris);
-
-        System.out.println(carService.getAllByDriver(2L));
-
     }
 }
