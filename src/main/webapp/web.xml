@@ -72,7 +72,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>addDriverToCar</servlet-name>
-        <url-pattern>/cars/drivers/add</url-pattern>
+        <url-pattern>/cars/driver/add</url-pattern>
     </servlet-mapping>
-
 </web-app>

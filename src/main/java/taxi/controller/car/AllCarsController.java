@@ -21,6 +21,6 @@ public class AllCarsController extends HttpServlet {
 
         List<Car> allCars = carService.getAll();
         req.setAttribute("cars", allCars);
-        req.getRequestDispatcher("/WEB-INF/views/cars/allCars.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/view/car/all.jsp").forward(req,resp);
     }
 }
