@@ -15,7 +15,6 @@
         <th>Model</th>
         <th>Manufacturer</th>
         <th>Driver</th>
-        <th>Delete</th>
     </tr>
     <c:forEach var="car" items="${cars}">
         <tr>
