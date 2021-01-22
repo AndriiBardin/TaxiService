@@ -54,6 +54,7 @@ public class Main {
         driverUpdate.setLicenceNumber("39800");
         driverService.update(driverUpdate);
         System.out.println(driverService.get(2L));
+        System.out.println(driverService.getAll());
 
         Car yaris = new Car("Yaris GR", toyota);
         Car markII = new Car("MarkII", toyota);

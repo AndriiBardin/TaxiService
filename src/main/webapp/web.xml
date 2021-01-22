@@ -5,10 +5,73 @@
          version="4.0">
     <servlet>
         <servlet-name>index</servlet-name>
-        <servlet-class>taxi.controllers.IndexController</servlet-class>
+        <servlet-class>taxi.controller.IndexController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>index</servlet-name>
-        <url-pattern>/index</url-pattern>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>drivers</servlet-name>
+        <servlet-class>taxi.controller.driver.AllDriversController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>drivers</servlet-name>
+        <url-pattern>/drivers</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createDriver</servlet-name>
+        <servlet-class>taxi.controller.driver.CreateDriverController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createDriver</servlet-name>
+        <url-pattern>/drivers/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>manufacturers</servlet-name>
+        <servlet-class>taxi.controller.manufacturer.AllManufacturersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manufacturers</servlet-name>
+        <url-pattern>/manufacturers</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createManufacturer</servlet-name>
+        <servlet-class>taxi.controller.manufacturer.CreateManufacturerController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createManufacturer</servlet-name>
+        <url-pattern>/manufacturers/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>cars</servlet-name>
+        <servlet-class>taxi.controller.car.AllCarsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cars</servlet-name>
+        <url-pattern>/cars</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createCar</servlet-name>
+        <servlet-class>taxi.controller.car.CreateCarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createCar</servlet-name>
+        <url-pattern>/cars/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addDriverToCar</servlet-name>
+        <servlet-class>taxi.controller.car.AddDriverToCarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addDriverToCar</servlet-name>
+        <url-pattern>/cars/driver/add</url-pattern>
     </servlet-mapping>
 </web-app>
