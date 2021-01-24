@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1>Login page</h1>
+<h3 style="color: crimson">${message}</h3>
 <form action="${pageContext.request.contextPath}/login" method="post">
     Enter your login: <input type="text" name="login">
     Enter your password: <input type="password" name="password">
