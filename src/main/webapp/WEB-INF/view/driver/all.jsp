@@ -12,6 +12,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Licence</th>
+        <th>Login</th>
     </tr>
     <c:forEach var="driver" items="${drivers}">
         <tr>
@@ -23,6 +24,9 @@
             </td>
             <td>
                 <c:out value="${driver.licenceNumber}"/>
+            </td>
+            <td>
+                <c:out value="${driver.login}"/>
             </td>
         </tr>
     </c:forEach>

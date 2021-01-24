@@ -47,3 +47,6 @@ CREATE TABLE storage.driver_cars (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+ALTER TABLE `storage`.`drivers`
+    ADD COLUMN `login` VARCHAR(45) NOT NULL AFTER `deleted`,
+ADD COLUMN `password` VARCHAR(45) NOT NULL AFTER `login`;

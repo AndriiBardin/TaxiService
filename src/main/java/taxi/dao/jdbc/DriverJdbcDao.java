@@ -17,12 +17,15 @@ import taxi.services.util.ConnectionUtil;
 public class DriverJdbcDao implements DriverDao {
     @Override
     public Driver create(Driver driver) {
-        String addDriverQuery = "INSERT INTO drivers (name, licence) VALUES (?, ?)";
+        String addDriverQuery = "INSERT INTO drivers (name, licence, login, password) "
+                + "VALUES (?, ?, ?, ?)";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(addDriverQuery,
                         Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, driver.getName());
             preparedStatement.setString(2, driver.getLicenceNumber());
+            preparedStatement.setString(3, driver.getLogin());
+            preparedStatement.setString(4, driver.getPassword());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -94,13 +97,37 @@ public class DriverJdbcDao implements DriverDao {
         }
     }
 
+    @Override
+    public Optional<Driver> findByLogin(String login) {
+        String findByLoginQuery = "SELECT * FROM drivers WHERE login = ? "
+                + "AND deleted = false";
+        try (Connection connection = ConnectionUtil.getConnection();
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(findByLoginQuery)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(getDriver(resultSet));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Driver with login " + login
+            + " is not registered");
+        }
+        return Optional.empty();
+    }
+
     private Driver getDriver(ResultSet resultSet) {
         try {
             Long driverId = resultSet.getLong("id");
             String name = resultSet.getString("name");
             String licenseNumber = resultSet.getString("licence");
-            Driver driver = new Driver(name, licenseNumber);
+            String login = resultSet.getString("login");
+            String password = resultSet.getString("password");
+            Driver driver = new Driver(name, licenseNumber, login, password);
             driver.setId(driverId);
+            driver.setLogin(login);
+            driver.setPassword(password);
             return driver;
         } catch (SQLException e) {
             throw new RuntimeException("Cant get driver from resultSet");
