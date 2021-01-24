@@ -13,6 +13,7 @@ import taxi.lib.Injector;
 import taxi.services.DriverService;
 
 public class AuthenticationFilter implements Filter {
+    private static final String DRIVER_ID = "driver_id";
     private static final Injector injector = Injector.getInstance("taxi");
     private final DriverService driverService = (DriverService)
             injector.getInstance(DriverService.class);
@@ -34,7 +35,7 @@ public class AuthenticationFilter implements Filter {
             return;
         }
 
-        Long driverId = (Long) req.getSession().getAttribute("driver_id");
+        Long driverId = (Long) req.getSession().getAttribute(DRIVER_ID);
         if (driverId == null || driverService.get(driverId) == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
