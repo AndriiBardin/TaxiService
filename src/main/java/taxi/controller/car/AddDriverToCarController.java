@@ -12,6 +12,7 @@ import taxi.services.CarService;
 import taxi.services.DriverService;
 
 public class AddDriverToCarController extends HttpServlet {
+    private static final String DRIVER_ID = "driver_id";
     private static final Injector injector = Injector.getInstance("taxi");
     private final CarService carService =
             (CarService) injector.getInstance(CarService.class);
@@ -28,7 +29,7 @@ public class AddDriverToCarController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         Long carId = Long.parseLong(req.getParameter("car_id"));
-        Long driverId = Long.parseLong(req.getParameter("driver_id"));
+        Long driverId = Long.parseLong(req.getParameter(DRIVER_ID));
         Car car = carService.get(carId);
         Driver driver = driverService.get(driverId);
         carService.addDriverToCar(driver, car);

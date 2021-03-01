@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Injector {
+    private static final String SPACE_REPLACE = "%20";
+    private static final String SPACE = " ";
     private static final Map<String, Injector> injectors = new HashMap<>();
-    private static final Map<Class<?>, Object> instanceOfClasses = new HashMap<>();
-    private static final List<Class<?>> classes = new ArrayList<>();
+    private final Map<Class<?>, Object> instanceOfClasses = new HashMap<>();
+    private final List<Class<?>> classes = new ArrayList<>();
 
     private Injector(String mainPackageName) {
         try {
@@ -33,7 +35,7 @@ public class Injector {
         return injector;
     }
 
-    public static Object getInstance(Class<?> certainInterface) {
+    public Object getInstance(Class<?> certainInterface) {
         Object newInstanceOfClass = null;
         Class<?> clazz = findClassExtendingInterface(certainInterface);
         Object instanceOfCurrentClass = createInstance(clazz);
@@ -57,59 +59,6 @@ public class Injector {
         return newInstanceOfClass;
     }
 
-    private static Class<?> findClassExtendingInterface(Class<?> certainInterface) {
-        for (Class<?> clazz : classes) {
-            Class<?>[] interfaces = clazz.getInterfaces();
-            for (Class<?> singleInterface : interfaces) {
-                if (singleInterface.equals(certainInterface)
-                        && (clazz.isAnnotationPresent(Service.class)
-                        || clazz.isAnnotationPresent(Dao.class))) {
-                    return clazz;
-                }
-            }
-        }
-        throw new RuntimeException("Can't find class which implements "
-                + certainInterface.getName()
-                + " interface and has valid annotation (Dao or Service)");
-    }
-
-    private static Object getNewInstance(Class<?> certainClass) {
-        if (instanceOfClasses.containsKey(certainClass)) {
-            return instanceOfClasses.get(certainClass);
-        }
-        Object newInstance = createInstance(certainClass);
-        instanceOfClasses.put(certainClass, newInstance);
-        return newInstance;
-    }
-
-    private static boolean isFieldInitialized(Field field, Object instance) {
-        field.setAccessible(true);
-        try {
-            return field.get(instance) != null;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Can't get access to field");
-        }
-    }
-
-    private static Object createInstance(Class<?> clazz) {
-        Object newInstance;
-        try {
-            Constructor<?> classConstructor = clazz.getConstructor();
-            newInstance = classConstructor.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("Can't create object of the class", e);
-        }
-        return newInstance;
-    }
-
-    private static void setValueToField(Field field, Object instanceOfClass, Object classToInject) {
-        try {
-            field.setAccessible(true);
-            field.set(instanceOfClass, classToInject);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Can't set value to field ", e);
-        }
-    }
     /**
      * Scans all classes accessible from the context class loader which
      * belong to the given package and subpackages.
@@ -119,7 +68,6 @@ public class Injector {
      * @throws ClassNotFoundException if the class cannot be located
      * @throws IOException            if I/O errors occur
      */
-
     private static List<Class<?>> getClasses(String packageName)
             throws IOException, ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -131,7 +79,7 @@ public class Injector {
         List<File> dirs = new ArrayList<>();
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+            dirs.add(new File(resource.getFile().replaceAll(SPACE_REPLACE, SPACE)));
         }
         ArrayList<Class<?>> classes = new ArrayList<>();
         for (File directory : dirs) {
@@ -139,6 +87,7 @@ public class Injector {
         }
         return classes;
     }
+
     /**
      * Recursive method used to find all classes in a given directory and subdirs.
      *
@@ -147,7 +96,6 @@ public class Injector {
      * @return The classes
      * @throws ClassNotFoundException if the class cannot be located
      */
-
     private static List<Class<?>> findClasses(File directory, String packageName)
             throws ClassNotFoundException {
         List<Class<?>> classes = new ArrayList<>();
@@ -165,10 +113,65 @@ public class Injector {
                             + file.getName()));
                 } else if (file.getName().endsWith(".class")) {
                     classes.add(Class.forName(packageName + '.'
-                            + file.getName().substring(0, file.getName().length() - 6)));
+                            + file.getName()
+                            .substring(0, file.getName().length() - 6)));
                 }
             }
         }
         return classes;
+    }
+
+    private Class<?> findClassExtendingInterface(Class<?> certainInterface) {
+        for (Class<?> clazz : classes) {
+            Class<?>[] interfaces = clazz.getInterfaces();
+            for (Class<?> singleInterface : interfaces) {
+                if (singleInterface.equals(certainInterface)
+                        && (clazz.isAnnotationPresent(Service.class)
+                        || clazz.isAnnotationPresent(Dao.class))) {
+                    return clazz;
+                }
+            }
+        }
+        throw new RuntimeException("Can't find class which implements "
+                + certainInterface.getName()
+                + " interface and has valid annotation (Dao or Service)");
+    }
+
+    private Object getNewInstance(Class<?> certainClass) {
+        if (instanceOfClasses.containsKey(certainClass)) {
+            return instanceOfClasses.get(certainClass);
+        }
+        Object newInstance = createInstance(certainClass);
+        instanceOfClasses.put(certainClass, newInstance);
+        return newInstance;
+    }
+
+    private boolean isFieldInitialized(Field field, Object instance) {
+        field.setAccessible(true);
+        try {
+            return field.get(instance) != null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Can't get access to field");
+        }
+    }
+
+    private Object createInstance(Class<?> clazz) {
+        Object newInstance;
+        try {
+            Constructor<?> classConstructor = clazz.getConstructor();
+            newInstance = classConstructor.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Can't create object of the class", e);
+        }
+        return newInstance;
+    }
+
+    private void setValueToField(Field field, Object instanceOfClass, Object classToInject) {
+        try {
+            field.setAccessible(true);
+            field.set(instanceOfClass, classToInject);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Can't set value to field ", e);
+        }
     }
 }

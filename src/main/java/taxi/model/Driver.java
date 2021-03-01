@@ -4,10 +4,14 @@ public class Driver {
     private Long id;
     private String name;
     private String licenceNumber;
+    private String login;
+    private String password;
 
-    public Driver(String name, String licenceNumber) {
+    public Driver(String name, String licenceNumber, String login, String password) {
         this.name = name;
         this.licenceNumber = licenceNumber;
+        this.login = login;
+        this.password = password;
     }
 
     public void setId(Long id) {
@@ -34,11 +38,28 @@ public class Driver {
         return licenceNumber;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Driver{"
                 + "id=" + id
-                + ", name='" + name
-                + ", licenceNumber='" + licenceNumber + '}';
+                + ", name= " + name
+                + ", licenceNumber=" + licenceNumber
+                + ", login=" + login + '}';
     }
 }
